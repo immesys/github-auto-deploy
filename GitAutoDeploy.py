@@ -55,7 +55,7 @@ class GitAutoDeploy(BaseHTTPRequestHandler):
         config = self.getConfig()
         for repository in config['repositories']:
             if(repository['url'] == repoUrl and repository.get('ref', '') in ('', ref)):
-                res.append(repository['path'])
+                res.append((repository['path'], respository.get('ref',''))
         return res
 
     def respond(self):
@@ -67,7 +67,7 @@ class GitAutoDeploy(BaseHTTPRequestHandler):
         if(not self.quiet):
             print "\nPost push request received"
             print 'Updating ' + path
-        call(['cd "' + path + '" && git pull'], shell=True)
+        call(['cd "' + path[0] + '" && git pull origin "' + path[1] +'"', shell=True)
 
     def deploy(self, path):
         config = self.getConfig()
