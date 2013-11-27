@@ -72,11 +72,11 @@ class GitAutoDeploy(BaseHTTPRequestHandler):
     def deploy(self, path):
         config = self.getConfig()
         for repository in config['repositories']:
-            if(repository['path'] == path):
+            if(repository['path'] == path[0]):
                 if 'deploy' in repository:
                      if(not self.quiet):
                          print 'Executing deploy command'
-                     call(['cd "' + path + '" && ' + repository['deploy']], shell=True)
+                     call(['cd "' + path[0] + '" && ' + repository['deploy']], shell=True)
                 break
 
 def main():
