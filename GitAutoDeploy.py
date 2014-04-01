@@ -70,7 +70,7 @@ class GitAutoDeploy(BaseHTTPRequestHandler):
 		self.wfile.write('No repositorys need to be redeployed.')
 	else:
 		for path in paths:
-			self.wfile.write('\"' + path + '\" Will be redeployed.')
+			self.wfile.write('\"' + path[0] + '\" Will be redeployed.')
 
 
     def pull(self, path):
