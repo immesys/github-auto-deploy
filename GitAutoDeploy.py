@@ -2,7 +2,8 @@
 
 import json, urlparse, sys, os
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
-from subprocess import call
+from subprocess import call, Popen
+from threading import Thread
 
 class GitAutoDeploy(BaseHTTPRequestHandler):
 
@@ -86,7 +87,8 @@ class GitAutoDeploy(BaseHTTPRequestHandler):
                 if 'deploy' in repository:
                      if(not self.quiet):
                          print 'Executing deploy command'
-                     call(['cd "' + path[0] + '" && ' + repository['deploy']], shell=True)
+                     Popen(['cd "' + path[0] + '" && ' + repository['deploy']], shell=True,
+                     	   stdin=None, stdout=None, stderr=None)
                 break
 
 def main():
