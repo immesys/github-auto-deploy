@@ -53,7 +53,7 @@ class GitAutoDeploy(BaseHTTPRequestHandler):
         items = []
         for itemString in post['payload']:
             item = json.loads(itemString)
-            items.append((item['repository']['url'], item['ref']))
+            items.append((item['repository']['url'], item['ref'], item['after']))
         return items
 
     def getMatchingPaths(self, repoUrl, ref):
@@ -88,8 +88,8 @@ class GitAutoDeploy(BaseHTTPRequestHandler):
                 if 'deploy' in repository:
                      if(not self.quiet):
                          print 'Executing deploy command'
-                     Popen(['cd "' + path[0] + '" && ' + repository['deploy']], shell=True,
-                     	   stdin=None, stdout=None, stderr=None)
+                     Popen(['cd', path[0], '&&', repository['deploy'], path[2]], 
+                     	   shell=True, stdin=None, stdout=None, stderr=None)
                 break
 
 def main():
