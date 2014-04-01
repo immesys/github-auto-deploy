@@ -7,7 +7,7 @@ from threading import Thread
 
 class GitAutoDeploy(BaseHTTPRequestHandler):
 
-    CONFIG_FILEPATH = 'GitAutoDeploy.conf.json'
+    CONFIG_FILEPATH = os.path.realpath('GitAutoDeploy.conf.json')
     config = None
     quiet = False
     daemon = False
