@@ -36,43 +36,52 @@ class GitAutoDeploy(BaseHTTPRequestHandler):
 
     def do_POST(self):
         url_refs = self.parseRequest()
-	matchingPaths = []
+        matchingPaths = []
+
         for url, ref in url_refs:
             paths = self.getMatchingPaths(url, ref)
-	    for path in paths:
-		matchingPaths.append(path)
-	self.respond(matchingPaths)
-	for path in matchingPaths:
-             self.pull(path)
-             self.deploy(path)
+
+        for path in paths:
+            matchingPaths.append(path)
+
+       self.respond(matchingPaths)
+
+       for path in matchingPaths:
+         self.pull(path)
+         self.deploy(path)
 
     def parseRequest(self):
         length = int(self.headers.getheader('content-length'))
         body = self.rfile.read(length)
         post = urlparse.parse_qs(body)
         items = []
+
         for itemString in post['payload']:
             item = json.loads(itemString)
             items.append((item['repository']['url'], item['ref'], item['after']))
+
         return items
 
     def getMatchingPaths(self, repoUrl, ref):
         res = []
         config = self.getConfig()
+
         for repository in config['repositories']:
             if(repository['url'] == repoUrl and repository.get('ref', '') in ('', ref)):
                 res.append((repository['path'], repository.get('ref','')))
+
         return res
 
     def respond(self,paths):
-        self.send_response(200,paths)
+        self.send_response(200, paths)
         self.send_header('Content-type', 'text/plain')
         self.end_headers()
-	if (len(paths) == 0):
-		self.wfile.write('No repositorys need to be redeployed.')
-	else:
-		for path in paths:
-			self.wfile.write('\"' + path[0] + '\" Will be redeployed.')
+
+        if (len(paths) == 0):
+            self.wfile.write('No repositorys need to be redeployed.')
+        else:
+            for path in paths:
+                self.wfile.write('\"' + path[0] + '\" Will be redeployed.')
 
 
     def pull(self, path):
@@ -88,20 +97,20 @@ class GitAutoDeploy(BaseHTTPRequestHandler):
                 if 'deploy' in repository:
                      if(not self.quiet):
                          print 'Executing deploy command'
-                     Popen(['cd', path[0], '&&', repository['deploy'], path[2]], 
-                     	   shell=True, stdin=None, stdout=None, stderr=None)
+                     Popen(['cd', path[0], '&&', repository['deploy'], path[2]],
+                                shell=True, stdin=None, stdout=None, stderr=None)
                 break
 
 def main():
     try:
         server = None
-        for arg in sys.argv: 
+        for arg in sys.argv:
             if(arg == '-d' or arg == '--daemon-mode'):
                 GitAutoDeploy.daemon = True
                 GitAutoDeploy.quiet = True
             if(arg == '-q' or arg == '--quiet'):
                 GitAutoDeploy.quiet = True
-                
+
         if(GitAutoDeploy.daemon):
             pid = os.fork()
             if(pid != 0):
@@ -112,7 +121,7 @@ def main():
             print 'Github Autodeploy Service v 0.1 started'
         else:
             print 'Github Autodeploy Service v 0.1 started in daemon mode'
-             
+
         server = HTTPServer(('', GitAutoDeploy.getConfig()['port']), GitAutoDeploy)
         server.serve_forever()
     except (KeyboardInterrupt, SystemExit) as e:
