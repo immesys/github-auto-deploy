@@ -112,7 +112,7 @@ class GitAutoDeploy(BaseHTTPRequestHandler):
                     try:
                         call([self.NEWRELIC_DEPLOY % \
                              (repository['newrelic']['api'],
-                              repository['newrelic']['app_id'],
+                              int(repository['newrelic']['app_id']),
                               repository['newrelic']['description'],
                               path[2])])
                     except OSError as e:
