@@ -50,11 +50,11 @@ class GitAutoDeploy(BaseHTTPRequestHandler):
         for path in paths:
             matchingPaths.append(path)
 
-       self.respond(matchingPaths)
+        self.respond(matchingPaths)
 
-       for path in matchingPaths:
-         self.pull(path)
-         self.deploy(path)
+        for path in matchingPaths:
+            self.pull(path)
+            self.deploy(path)
 
     def parseRequest(self):
         length = int(self.headers.getheader('content-length'))
