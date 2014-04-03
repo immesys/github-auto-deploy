@@ -110,7 +110,7 @@ class GitAutoDeploy(BaseHTTPRequestHandler):
                     if(not self.quiet):
                          print 'Reporting deploy to Newrelic'
                     try:
-                        call([NEWRELIC_DEPLOY % \
+                        call([self.NEWRELIC_DEPLOY % \
                              (repository['newrelic']['api'],
                               repository['newrelic']['app_id'],
                               repository['newrelic']['description'],
