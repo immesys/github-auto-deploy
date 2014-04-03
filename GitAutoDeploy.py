@@ -44,8 +44,8 @@ class GitAutoDeploy(BaseHTTPRequestHandler):
         url_refs = self.parseRequest()
         matchingPaths = []
 
-        for url, ref in url_refs:
-            paths = self.getMatchingPaths(url, ref)
+        for url, ref, sha in url_refs:
+            paths = self.getMatchingPaths(url, ref, sha)
 
         for path in paths:
             matchingPaths.append(path)
@@ -68,13 +68,13 @@ class GitAutoDeploy(BaseHTTPRequestHandler):
 
         return items
 
-    def getMatchingPaths(self, repoUrl, ref):
+    def getMatchingPaths(self, repoUrl, ref, sha):
         res = []
         config = self.getConfig()
 
         for repository in config['repositories']:
             if(repository['url'] == repoUrl and repository.get('ref', '') in ('', ref)):
-                res.append((repository['path'], repository.get('ref','')))
+                res.append((repository['path'], repository.get('ref',''), ('', sha)))
 
         return res
 
