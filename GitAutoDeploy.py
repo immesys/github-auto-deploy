@@ -110,11 +110,13 @@ class GitAutoDeploy(BaseHTTPRequestHandler):
                     if(not self.quiet):
                          print 'Reporting deploy to Newrelic'
                     try:
-                        call([self.NEWRELIC_DEPLOY % \
-                             (repository['newrelic']['api'],
-                              int(repository['newrelic']['app_id']),
-                              repository['newrelic']['description'],
-                              path[2])])
+                        command = self.NEWRELIC_DEPLOY % \
+                            (repository['newrelic']['api'],
+                             int(repository['newrelic']['app_id']),
+                             repository['newrelic']['description'],
+                             path[2])
+
+                        call(command.split(' '), shell=True)
                     except OSError as e:
                         if(e):
                             print >> sys.stderr, e
