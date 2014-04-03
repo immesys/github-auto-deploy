@@ -93,7 +93,7 @@ class GitAutoDeploy(BaseHTTPRequestHandler):
     def pull(self, path):
         if(not self.quiet):
             print "\nPost push request received"
-            print "Updating %s refspec %s" % path
+            print "Updating %s refspec %s" % (path[0], path[1])
         call(['cd "' + path[0] + '" && git pull origin "' + path[1] +'"'], shell=True)
 
     def deploy(self, path):
