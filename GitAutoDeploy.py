@@ -9,11 +9,11 @@ class GitAutoDeploy(BaseHTTPRequestHandler):
 
     SCRIPT_PATH = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
     CONFIG_FILEPATH = os.path.join(SCRIPT_PATH, 'GitAutoDeploy.conf.json')
-    NEWRELIC_DEPLOY = ('curl -H "x-api-key:%s" '
-                       '-d "deployment[application_id]=%d" '
-                       '-d "deployment[description]=%s" '
-                       '-d "deployment[revision]=%s" '
-                       '-d "deployment[user]=Github Auto Deploy" '
+    NEWRELIC_DEPLOY = ('curl;-H;"x-api-key:%s";'
+                       '-d;"deployment[application_id]=%d";'
+                       '-d;"deployment[description]=%s";'
+                       '-d;"deployment[revision]=%s";'
+                       '-d;"deployment[user]=Github Auto Deploy";'
                        'https://api.newrelic.com/deployments.xml')
     config = None
     quiet = False
@@ -74,7 +74,7 @@ class GitAutoDeploy(BaseHTTPRequestHandler):
 
         for repository in config['repositories']:
             if(repository['url'] == repoUrl and repository.get('ref', '') in ('', ref)):
-                res.append((repository['path'], repository.get('ref',''), ('', sha)))
+                res.append((repository['path'], repository.get('ref',''), sha))
 
         return res
 
@@ -116,7 +116,7 @@ class GitAutoDeploy(BaseHTTPRequestHandler):
                              repository['newrelic']['description'],
                              path[2])
 
-                        call(command.split(' '), shell=True)
+                        call(command.split(';'), shell=True)
                     except OSError as e:
                         if(e):
                             print >> sys.stderr, e
