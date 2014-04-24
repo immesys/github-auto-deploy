@@ -103,7 +103,7 @@ class GitAutoDeploy(BaseHTTPRequestHandler):
                 if 'deploy' in repository:
                     if(not self.quiet):
                          print 'Executing deploy command'
-                    Popen(['cd', path[0], '&&', repository['deploy'], '>', self.SCRIPT_PATH + 'deploy.log' ],
+                    Popen(['cd', path[0], '&&', repository['deploy'], '>', os.path.join(self.SCRIPT_PATH, 'deploy.log') ],
                           shell=True, stdin=None, stdout=None, stderr=None)
 
                 if 'newrelic' in repository:
