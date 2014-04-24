@@ -103,7 +103,7 @@ class GitAutoDeploy(BaseHTTPRequestHandler):
                 if 'deploy' in repository:
                     if(not self.quiet):
                          print 'Executing deploy command'
-                    Popen(['cd', path[0], '&&', repository['deploy']],
+                    Popen(['cd', path[0], '&&', repository['deploy'], '>', self.SCRIPT_PATH + 'deploy.log' ],
                           shell=True, stdin=None, stdout=None, stderr=None)
 
                 if 'newrelic' in repository:
@@ -140,9 +140,9 @@ def main():
             os.setsid()
 
         if(not GitAutoDeploy.quiet):
-            print 'Github Autodeploy Service v 0.1 started'
+            print 'Github Autodeploy Service v 0.2 started'
         else:
-            print 'Github Autodeploy Service v 0.1 started in daemon mode'
+            print 'Github Autodeploy Service v 0.2 started in daemon mode'
 
         server = HTTPServer(('', GitAutoDeploy.getConfig()['port']), GitAutoDeploy)
         server.serve_forever()
